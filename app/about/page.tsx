@@ -74,7 +74,7 @@ export default function AboutPage() {
         </section>
 
         <nav className="idea__nav">
-          <Link href="/" className="idea__nav__item">
+          <Link href="/start" className="idea__nav__item">
             Вернуться на главную страницу
           </Link>
         </nav>

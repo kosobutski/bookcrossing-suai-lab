@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import DemoAuthProvider from "./providers/DemoAuthProvider";
+import AppNav from "./ui/AppNav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,7 +11,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ru">
-      <body>{children}</body>
+      <body>
+        <DemoAuthProvider>
+          <AppNav />
+          {children}
+        </DemoAuthProvider>
+      </body>
     </html>
   );
 }
