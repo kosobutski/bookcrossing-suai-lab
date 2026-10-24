@@ -49,6 +49,9 @@ export default function StartPage() {
         <Link href="/books" className="page__link">
           Открыть каталог книг
         </Link>
+        <Link href="/gallery" className="page__link page__link--secondary">
+          Галерея и карта
+        </Link>
         <Link href="/about" className="page__link page__link--secondary">
           О проекте
         </Link>

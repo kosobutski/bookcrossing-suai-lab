@@ -1,0 +1,66 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin: 36px 0 24px;
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  overflow: hidden;
+  padding: 0 0 22px;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  background: #ffffff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.card:hover {
+  border-color: #111111;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 8%);
+}
+
+.card:focus-visible {
+  outline: 3px solid #111111;
+  outline-offset: 4px;
+}
+
+/* Одинаковые пропорции фото во всех карточках. */
+.imageWrap {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  margin-bottom: 8px;
+  background: #dddddd;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.title,
+.summary,
+.badge {
+  padding: 0 22px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.summary {
+  color: #444444;
+}
+
+.badge {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f6b3a;
+}

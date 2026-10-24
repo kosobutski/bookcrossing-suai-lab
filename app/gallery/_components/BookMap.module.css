@@ -1,0 +1,21 @@
+.section {
+  margin-top: 48px;
+}
+
+/* У контейнера карты должна быть явная высота, иначе карта не видна. */
+.canvas {
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  background: #dddddd;
+}
+
+.status {
+  margin: 0 0 16px;
+  padding: 16px 20px;
+  border-left: 4px solid #111111;
+  background: #ffffff;
+  line-height: 1.5;
+}
