@@ -14,6 +14,9 @@ type YandexPlacemark = {
 };
 
 type YandexMap = {
+  container: {
+    fitToViewport: () => void;
+  };
   geoObjects: {
     add: (placemark: YandexPlacemark) => void;
   };
@@ -91,15 +94,18 @@ export default function BookMap({ books, onSelect }: BookMapProps) {
   const apiKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY ?? "";
 
   useEffect(() => {
-    if (!apiKey || !containerRef.current || books.length === 0) return;
+    const container = containerRef.current;
+    if (!apiKey || !container || books.length === 0) return;
 
     let disposed = false;
     let map: YandexMap | null = null;
+    let resizeObserver: ResizeObserver | null = null;
+    let visibilityObserver: IntersectionObserver | null = null;
 
-    async function buildMap() {
+    async function buildMap(target: HTMLDivElement) {
       try {
         const ymaps = await loadMaps(apiKey);
-        if (disposed || !containerRef.current) return;
+        if (disposed) return;
 
         // Центр карты — среднее положение всех точек обмена.
         const center: Coordinates = [
@@ -107,7 +113,7 @@ export default function BookMap({ books, onSelect }: BookMapProps) {
           books.reduce((sum, book) => sum + book.longitude, 0) / books.length,
         ];
 
-        map = new ymaps.Map(containerRef.current, {
+        map = new ymaps.Map(target, {
           center,
           zoom: 13,
           controls: ["zoomControl"],
@@ -123,16 +129,36 @@ export default function BookMap({ books, onSelect }: BookMapProps) {
           map?.geoObjects.add(placemark);
         });
 
+        // Контейнер меняет размер вместе с макетом — сообщаем об этом карте,
+        // иначе внутри остаются серые незаполненные области.
+        resizeObserver = new ResizeObserver(() => {
+          map?.container.fitToViewport();
+        });
+        resizeObserver.observe(target);
+
         setStatus("ready");
       } catch {
         if (!disposed) setStatus("error");
       }
     }
 
-    void buildMap();
+    // Карта ниже первого экрана, поэтому API загружается только
+    // когда пользователь до неё долистал.
+    visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          visibilityObserver?.disconnect();
+          void buildMap(container);
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    visibilityObserver.observe(container);
 
     return () => {
       disposed = true;
+      visibilityObserver?.disconnect();
+      resizeObserver?.disconnect();
       map?.destroy();
     };
   }, [apiKey, books, onSelect]);
@@ -167,6 +193,7 @@ export default function BookMap({ books, onSelect }: BookMapProps) {
         <div
           ref={containerRef}
           className={styles.canvas}
+          role="region"
           aria-label="Интерактивная карта точек обмена"
         />
       ) : null}

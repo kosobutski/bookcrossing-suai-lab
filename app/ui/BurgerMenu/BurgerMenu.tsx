@@ -90,7 +90,11 @@ export default function BurgerMenu() {
         Колибри
       </Link>
 
-      {user ? <span className={styles.user}>{user.name}</span> : null}
+      {user ? (
+        <span className={styles.user} title={user.name}>
+          {user.name}
+        </span>
+      ) : null}
 
       <button
         ref={openButtonRef}

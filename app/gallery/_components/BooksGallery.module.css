@@ -1,42 +1,38 @@
+/* Mobile-first: на узком экране одна колонка, дальше auto-fit
+   добавляет колонки, пока карточка не уже 13rem. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin: 36px 0 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--gap);
+  margin: clamp(1.5rem, 4vw, 2.25rem) 0 1.5rem;
 }
 
 .card {
   display: grid;
   align-content: start;
-  gap: 8px;
+  gap: 0.4rem;
+  min-width: 0;
   overflow: hidden;
-  padding: 0 0 22px;
-  border: 1px solid #c9c9c9;
-  border-radius: 10px;
-  background: #ffffff;
+  padding: 0 0 clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid var(--border);
+  border-radius: clamp(0.5rem, 1.5vw, 0.625rem);
+  background: var(--surface);
   color: inherit;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.card:hover {
-  border-color: #111111;
-  box-shadow: 0 4px 14px rgb(0 0 0 / 8%);
 }
 
 .card:focus-visible {
-  outline: 3px solid #111111;
   outline-offset: 4px;
 }
 
-/* Одинаковые пропорции фото во всех карточках. */
+/* aspect-ratio резервирует место под фото до его загрузки. */
 .imageWrap {
   position: relative;
   display: block;
   aspect-ratio: 3 / 2;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
   background: #dddddd;
 }
 
@@ -47,20 +43,34 @@
 .title,
 .summary,
 .badge {
-  padding: 0 22px;
+  min-width: 0;
+  padding: 0 clamp(1rem, 3vw, 1.4rem);
+  overflow-wrap: anywhere;
 }
 
 .title {
-  font-size: 26px;
+  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
   font-weight: 700;
 }
 
 .summary {
-  color: #444444;
+  color: var(--muted);
 }
 
 .badge {
-  font-size: 18px;
+  font-size: 0.75em;
   font-weight: 700;
   color: #1f6b3a;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card {
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+
+  .card:hover {
+    border-color: var(--text);
+    box-shadow: 0 4px 14px rgb(0 0 0 / 8%);
+    transform: translateY(-2px);
+  }
 }

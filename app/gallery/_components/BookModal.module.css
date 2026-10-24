@@ -4,50 +4,44 @@
   z-index: 3000;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: clamp(0.5rem, 3vw, 1.5rem);
   background: rgb(17 17 17 / 70%);
 }
 
-/* Окно не выше экрана, длинное содержимое прокручивается внутри. */
+/* Окно не шире экрана и не выше динамической высоты viewport (dvh),
+   длинное содержимое прокручивается внутри. */
 .dialog {
   position: relative;
-  width: min(760px, 100%);
-  max-height: calc(100dvh - 48px);
+  width: min(40rem, 100%);
+  max-height: calc(100dvh - 1rem);
   overflow-y: auto;
-  padding: 32px;
-  border-radius: 12px;
-  background: #ffffff;
+  overscroll-behavior: contain;
+  padding: clamp(1rem, 4vw, 2rem);
+  border-radius: clamp(0.5rem, 2vw, 0.75rem);
+  background: var(--surface);
   box-shadow: 0 24px 70px rgb(0 0 0 / 35%);
 }
 
 .title {
-  margin: 0 56px 20px 0;
-  font-size: 34px;
+  margin: 0 3.25rem 1rem 0;
+  font-size: clamp(1.3rem, 1rem + 1vw, 1.75rem);
+  overflow-wrap: anywhere;
 }
 
 .close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 48px;
-  height: 48px;
+  top: clamp(0.5rem, 2vw, 1rem);
+  right: clamp(0.5rem, 2vw, 1rem);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
   border: 0;
   border-radius: 50%;
-  background: #ededed;
-  font-size: 32px;
+  background: var(--background);
+  font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
-}
-
-.close:hover {
-  background: #dddddd;
-}
-
-.close:focus-visible,
-.dialog a:focus-visible,
-.dialog button:focus-visible {
-  outline: 3px solid #111111;
-  outline-offset: 3px;
 }
 
 .image {
@@ -58,15 +52,15 @@
 }
 
 .text {
-  margin: 20px 0 0;
+  margin: 1.25rem 0 0;
   line-height: 1.6;
 }
 
+/* На узком экране подпись и значение друг под другом. */
 .details {
   display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 8px 16px;
-  margin: 20px 0 0;
+  gap: 0.2rem;
+  margin: 1.25rem 0 0;
 }
 
 .details dt {
@@ -74,17 +68,63 @@
 }
 
 .details dd {
-  margin: 0;
+  margin: 0 0 0.5rem;
+  overflow-wrap: anywhere;
 }
 
+/* Строка действий переносится; на узком экране кнопки во всю ширину. */
 .actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 28px;
-  margin-top: 24px;
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.actions > * {
+  min-height: 2.75rem;
 }
 
 .actions :global(.button) {
   margin-top: 0;
+}
+
+@media (min-width: 30rem) {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.75rem;
+  }
+
+  .actions > a {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (min-width: 48rem) {
+  .details {
+    grid-template-columns: 9rem 1fr;
+    gap: 0.5rem 1rem;
+  }
+
+  .details dd {
+    margin: 0;
+  }
+}
+
+/* В альбомной ориентации телефона высоты мало — уменьшаем отступы. */
+@media (orientation: landscape) and (max-height: 32rem) {
+  .dialog {
+    max-height: calc(100dvh - 0.5rem);
+  }
+
+  .overlay {
+    padding: 0.25rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close:hover {
+    background: #dddddd;
+  }
 }

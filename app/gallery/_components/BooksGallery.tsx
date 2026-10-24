@@ -41,7 +41,7 @@ export default function BooksGallery() {
   return (
     <>
       <div className={styles.grid}>
-        {books.map((book) => (
+        {books.map((book, index) => (
           <button
             className={styles.card}
             type="button"
@@ -53,7 +53,14 @@ export default function BooksGallery() {
                 src={book.image}
                 alt={book.imageAlt}
                 fill
-                sizes="(max-width: 700px) 100vw, 33vw"
+                // Ширина карточки: 1 колонка до 30rem, 2 до 45rem, дальше 3 в ряд
+                // внутри страницы шириной не больше 72rem.
+                sizes="(max-width: 30rem) calc(100vw - 2rem), (max-width: 45rem) 45vw, (max-width: 72rem) 30vw, 22rem"
+                // На телефоне в первый экран попадают две карточки, и любая из них
+                // может оказаться LCP-элементом: они грузятся сразу и с высоким
+                // приоритетом, остальные — лениво.
+                loading={index < 2 ? "eager" : "lazy"}
+                fetchPriority={index < 2 ? "high" : "auto"}
                 className={styles.image}
               />
             </span>

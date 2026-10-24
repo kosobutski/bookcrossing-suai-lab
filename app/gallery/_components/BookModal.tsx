@@ -115,7 +115,7 @@ export default function BookModal({
           width={900}
           height={600}
           className={styles.image}
-          sizes="(max-width: 700px) calc(100vw - 48px), 720px"
+          sizes="(max-width: 48rem) calc(100vw - 3rem), 44rem"
         />
 
         <p className={styles.text}>{book.summary}</p>
