@@ -1,0 +1,16 @@
+// Генерирует Prisma Client для Prisma ORM 6.19.2.
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Читает подключение к PostgreSQL из переменной DATABASE_URL (.env).
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Временная модель только для проверки генерации клиента.
+// Миграция не выполняется; в ЛР6 модель заменяется моделями предметной области.
+model SetupCheck {
+  id Int @id
+}
